@@ -1,3 +1,22 @@
+## Thought process
+
+Based on the specifications of the task I tried to build a form that it is flexible and can accept any amount of fields at any given time.
+
+From the Parent, different fields can be sent to the form through props and the form takes care of rendering those props into inputs.
+The inner state of the form is also sent back to the parent in case there is need of further processing.
+
+To keep the components as simple as possible, the only APIs used are `useState` and `useEffect`.
+
+In a working environment for form creation and validation I would have choose the combo `Formik` and `Yup` but in this case
+I just wrote a small simple regex pattern and used the state to handle the validation.
+
+I wrote some tests using `testing-library/react`, this library tests user behaviour rather than just testing functionality from methods one by one. Testing how the user interacts with the app by mocking the user flows gives (in my opinion) a more robust test coverage of the components.
+
+As a side note, I don't have any previous experience with TypeScript, so probably there are many functionalities missing, although just by adding
+it to the project it already catches a lot of issues in comparisson with developing using just ES6+React.
+
+## Auto generated Readme part
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
