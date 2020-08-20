@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 function GenericForm({ inputs, onSuccess }: any) {
   const [formInputs, setFormInputs] = useState([]);
   const [values, setValues] = useState({});
+  const [errors, setErrors] = useState("");
 
   useEffect(() => {
     setFormInputs(inputs);
@@ -10,11 +11,25 @@ function GenericForm({ inputs, onSuccess }: any) {
 
   const handleSubmit = (event: any) => {
     event.preventDefault();
-    console.log(`submitting value ${JSON.stringify(values)}`);
     onSuccess(values);
+    setValues({});
   };
 
-  const handleInputChange = (index: number, event: any) => {
+  const validateName = (name: string, value: string) => {
+    if (name === "name") {
+      const regex = "wooga\\.\\w{2,}";
+      const foundInString = value.match(regex);
+
+      !foundInString
+        ? setErrors(
+            "Name must start with 'wooga.' and contain 2 or more characters."
+          )
+        : setErrors("");
+    }
+  };
+
+  const handleInputChange = (event: any) => {
+    validateName(event.target.name, event.target.value);
     setValues({ ...values, [event.target.name]: event.target.value });
   };
 
@@ -23,13 +38,14 @@ function GenericForm({ inputs, onSuccess }: any) {
       return (
         <div key={`input-${index}`}>
           <label>
-            {inputName}
+            {inputName}{" "}
             <input
               type="text"
               name={inputName}
-              value={values[inputName]}
-              onChange={(event) => handleInputChange(index, event)}
+              value={values[inputName] || ""}
+              onChange={(event) => handleInputChange(event)}
             />
+            <div>{inputName === "name" && errors}</div>
           </label>
         </div>
       );
@@ -39,7 +55,7 @@ function GenericForm({ inputs, onSuccess }: any) {
   return (
     <form onSubmit={handleSubmit}>
       {getInputs(formInputs, values, handleInputChange)}
-      <input type="submit" value="Submit" />
+      {!errors && <input type="submit" value="Submit" />}
     </form>
   );
 }
